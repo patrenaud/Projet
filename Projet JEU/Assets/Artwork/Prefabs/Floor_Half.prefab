@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4427552163061990}
   - component: {fileID: 33874319968251774}
   - component: {fileID: 23881125876021302}
+  - component: {fileID: 65465951316334388}
   m_Layer: 8
   m_Name: Floor_Half
   m_TagString: Untagged
@@ -82,3 +83,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1717704802962988}
   m_Mesh: {fileID: 4300000, guid: b2d586a32eae9f64f8900fe4ef8f498c, type: 3}
+--- !u!65 &65465951316334388
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1717704802962988}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.999999, y: 0.20030016, z: 3}
+  m_Center: {x: -1.4999995, y: 0.10005002, z: 1.5}

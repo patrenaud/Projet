@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4565049432205390}
   - component: {fileID: 33508008046431726}
   - component: {fileID: 23717695967802792}
+  - component: {fileID: 65552053602526738}
   m_Layer: 8
   m_Name: Floor
   m_TagString: Untagged
@@ -82,3 +83,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1077201414347224}
   m_Mesh: {fileID: 4300000, guid: e91548aaa6705f74f9a0d17df7ea34b9, type: 3}
+--- !u!65 &65552053602526738
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1077201414347224}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.999999, y: 0.2002001, z: 3}
+  m_Center: {x: -1.4999995, y: 0.10010005, z: 1.5}
