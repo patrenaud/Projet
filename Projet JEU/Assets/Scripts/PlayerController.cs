@@ -12,22 +12,25 @@ public class PlayerController : MonoBehaviour
     public Button m_MoveButton;
     public Button m_AbilityButton;
     public float m_MoveSpeed = 5f;
-
     public GameObject m_MovePrefab;
     public GameObject m_AttackPrefab;
-
     public Vector3 m_Position;
+
+
+    private Vector3 m_NormalAttackZone;
 
 
     private void Awake()
     {
         m_MovePrefab.SetActive(false);
-        m_AttackPrefab.SetActive(false);
-
+        m_NormalAttackZone = m_AttackPrefab.transform.localScale;
+        m_AttackPrefab.transform.localScale = Vector3.zero;
     }
+
 
     private void Update()
     {
+        // Lorsque les bools sont activés par les boutons, les fonctions respectives sont appelées
         if (m_CanMove)
         {
             Move();
@@ -40,11 +43,6 @@ public class PlayerController : MonoBehaviour
         {
             Ability();
         }
-    }
-
-    private void FixedUpdate()
-    {
-
     }
 
     public void Move()
@@ -61,15 +59,15 @@ public class PlayerController : MonoBehaviour
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Enemy")))
             {
-                Debug.Log("Invalid Move");
-
+                ApplyDamage();
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("UI")))
             {
-                Debug.Log("Cancel Move");
-                m_CanMove = false;
+                Debug.Log("Cancel Move"); // TO DO !!!! Doit annuler le Move lorsque l'on click de nouveau sur le bouton
+                m_CanMove = false; // TO DO
             }
-            else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Ground")) && Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Interractible")))
+            // Permet le move seulement si le click est dans la zone de move et sur le ground 
+            else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Ground")) && Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("MoveZone")))
             {
                 Debug.Log("Move");
                 m_Position.x = Hitinfo.point.x;
@@ -84,6 +82,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Permet le déplacment du joueur 
     private IEnumerator MovetoPoint()
     {
         float Timer = 0f;
@@ -92,7 +91,6 @@ public class PlayerController : MonoBehaviour
             while (Vector3.Distance(m_Position, transform.position) > 0)
             {
                 transform.position = Vector3.Lerp(transform.position, m_Position, Timer);
-
                 Timer += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
@@ -109,15 +107,22 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Enemy")))
             {
-                // If bool de trigger de l'enemy est actif
-                //if (GetComponent<EnemyBehavior>().m_Attackable)
-                {
-                    Debug.Log("Attack");
-                    m_CanAttack = false;
-                    m_AttackButton.interactable = false;
-                    m_AttackPrefab.SetActive(false);
-                }
+                ApplyDamage();
             }
+        }
+    }
+
+    public void ApplyDamage()
+    {
+        // DUM THING WONG
+        // On peut attaquer un ennemi out of range si l'un d'entre eux est in range ***** Problème de Raycast
+        if (GameObject.Find("Enemy").GetComponent<EnemyBehavior>().m_Attackable || GameObject.Find("Enemy2").GetComponent<EnemyBehavior>().m_Attackable)
+        {
+            Debug.Log("Attack");
+            // Place to Apply damage
+            m_CanAttack = false;
+            m_AttackButton.interactable = false;
+            m_AttackPrefab.transform.localScale = Vector3.zero;
         }
     }
 
@@ -135,22 +140,36 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    // Cette région permet aux boutons d'appaler ces fonctions. Les Booleens sont activés et permettent les Move/Attack/Ability/EndTurn
     #region Activatables
     public void ActivateMove()
     {
-        m_CanMove = true;
-        Debug.Log("CanMove");
-        m_MovePrefab.SetActive(true);
-        //Instantiate(m_MovePrefab, transform.gameObject.transform.position, transform.gameObject.transform.rotation);
+        if (m_CanMove)
+        {
+            m_MovePrefab.SetActive(false);
+            m_CanMove = false;
+        }
+        else if (!m_CanMove)
+        {
+            m_CanMove = true;
+            Debug.Log("CanMove");
+            m_MovePrefab.SetActive(true);
+        }
     }
-
     public void ActivateAttack()
     {
-        m_CanAttack = true;
-        Debug.Log("CanAttack");
-        m_AttackPrefab.SetActive(true);
+        if (m_CanAttack)
+        {
+            m_AttackPrefab.transform.localScale = Vector3.zero;
+            m_CanAttack = false;
+        }
+        else if (!m_CanAttack)
+        {
+            m_CanAttack = true;
+            Debug.Log("CanAttack");
+            m_AttackPrefab.transform.localScale = m_NormalAttackZone;
+        }
     }
-
     public void ActivateHabilty()
     {
         m_CanAbility = true;

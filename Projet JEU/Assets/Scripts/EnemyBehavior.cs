@@ -4,22 +4,31 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
-    public bool m_Attackable = false;
 
+
+
+
+
+
+
+
+
+    public bool m_Attackable = false;
+    // m_Attackable means that we can press anywhere on the enemy that touches AttackZone to Attack it
     private void OnTriggerStay(Collider a_Other)
     {
         if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))
         {
-            a_Other.gameObject.GetComponent<Renderer>().material.color = Color.yellow;
+            gameObject.GetComponent<Renderer>().material.color = Color.yellow;
             m_Attackable = true;
         }
     }
 
-    private void OnTriggerLeave(Collider a_Other)
+    private void OnTriggerExit(Collider a_Other)
     {
         if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))
         {
-            a_Other.gameObject.GetComponent<Renderer>().material.color = Color.white;
+            gameObject.GetComponent<Renderer>().material.color = Color.white;
             m_Attackable = false;
         }
     }
