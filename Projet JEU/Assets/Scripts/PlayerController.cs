@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public TurnManager m_Turnmanager;
     public bool m_CanMove = false;
     public bool m_CanAttack = false;
     public bool m_CanAbility = false;
+    public bool m_EndTurn = false;
     public Button m_AttackButton;
     public Button m_MoveButton;
     public Button m_AbilityButton;
@@ -43,6 +45,10 @@ public class PlayerController : MonoBehaviour
         {
             Ability();
         }
+        else if (m_EndTurn)
+        {
+            EndTurn();
+        }
     }
 
     public void Move()
@@ -54,22 +60,24 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Player")))
             {
-                Debug.Log("Invalid Move");
+                Debug.Log("Invalid Move"); // Le joueur ne peut pas se déplacer sur lui-même
 
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Enemy")))
             {
-                ApplyDamage();
+                if (m_AttackPrefab.gameObject.GetComponent<AttackZoneBehavior>().m_Attackable)
+                {
+                    ApplyDamage(); // Le joueur peut attaquer un enemie dans sa zone de move seulement si elle est dans la zone d'attaque aussi
+                }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("UI")))
             {
-                Debug.Log("Cancel Move"); // TO DO !!!! Doit annuler le Move lorsque l'on click de nouveau sur le bouton
-                m_CanMove = false; // TO DO
+                // Si le joueur click à nouveau sur le bouton Move, il annule son mouvement.
+                m_CanMove = false;
             }
-            // Permet le move seulement si le click est dans la zone de move et sur le ground 
+            // Permet le move seulement si le click est dans la MoveZone et sur le Ground 
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Ground")) && Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("MoveZone")))
             {
-                Debug.Log("Move");
                 m_Position.x = Hitinfo.point.x;
                 m_Position.z = Hitinfo.point.z;
                 m_Position.y = transform.position.y;
@@ -107,36 +115,38 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Enemy")))
             {
-                ApplyDamage();
+                if (m_AttackPrefab.gameObject.GetComponent<AttackZoneBehavior>().m_Attackable)
+                {
+                    ApplyDamage();
+                    m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
+                    Destroy(Hitinfo.collider.gameObject);
+                    // Ceci est un fake pour montrer le kill
+                    gameObject.transform.localScale += new Vector3(1, 0, 1);
+                }
             }
         }
     }
 
     public void ApplyDamage()
     {
-        // DUM THING WONG
-        // On peut attaquer un ennemi out of range si l'un d'entre eux est in range ***** Problème de Raycast
-        if (GameObject.Find("Enemy").GetComponent<EnemyBehavior>().m_Attackable || GameObject.Find("Enemy2").GetComponent<EnemyBehavior>().m_Attackable)
-        {
-            Debug.Log("Attack");
-            // Place to Apply damage
-            m_CanAttack = false;
-            m_AttackButton.interactable = false;
-            m_AttackPrefab.transform.localScale = Vector3.zero;
-        }
+        // Place to Apply damage
+        m_CanAttack = false;
+        m_AttackButton.interactable = false;
+        m_AttackPrefab.transform.localScale = Vector3.zero;
     }
 
     public void Ability()
     {
-        Debug.Log(" Hability ");
         m_CanAbility = false;
         m_AbilityButton.interactable = false;
     }
 
     public void EndTurn()
     {
-
-        Debug.Log("End Turn");
+        // Ici on reset les buttons du joueur
+        m_AttackButton.interactable = false;
+        m_MoveButton.interactable = false;
+        m_AbilityButton.interactable = false;
     }
 
 
@@ -152,7 +162,6 @@ public class PlayerController : MonoBehaviour
         else if (!m_CanMove)
         {
             m_CanMove = true;
-            Debug.Log("CanMove");
             m_MovePrefab.SetActive(true);
         }
     }
@@ -166,14 +175,12 @@ public class PlayerController : MonoBehaviour
         else if (!m_CanAttack)
         {
             m_CanAttack = true;
-            Debug.Log("CanAttack");
             m_AttackPrefab.transform.localScale = m_NormalAttackZone;
         }
     }
     public void ActivateHabilty()
     {
         m_CanAbility = true;
-        Debug.Log("Hability");
     }
     #endregion
 }
