@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Button m_AttackButton;
     public Button m_MoveButton;
     public Button m_AbilityButton;
+    public Button m_EndTurnButton;
     public float m_MoveSpeed = 5f;
     public GameObject m_MovePrefab;
     public GameObject m_AttackPrefab;
@@ -65,9 +66,11 @@ public class PlayerController : MonoBehaviour
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Enemy")))
             {
-                if (m_AttackPrefab.gameObject.GetComponent<AttackZoneBehavior>().m_Attackable)
+                if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
                     ApplyDamage(); // Le joueur peut attaquer un enemie dans sa zone de move seulement si elle est dans la zone d'attaque aussi
+                    m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
+                    Destroy(Hitinfo.collider.gameObject);
                 }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("UI")))
@@ -115,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Enemy")))
             {
-                if (m_AttackPrefab.gameObject.GetComponent<AttackZoneBehavior>().m_Attackable)
+                if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
                     ApplyDamage();
                     m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
@@ -147,6 +150,7 @@ public class PlayerController : MonoBehaviour
         m_AttackButton.interactable = false;
         m_MoveButton.interactable = false;
         m_AbilityButton.interactable = false;
+        m_EndTurnButton.interactable = false;
     }
 
 

@@ -9,6 +9,7 @@ public class TurnManager : MonoBehaviour
     public Button m_AttackButton;
     public Button m_MoveButton;
     public Button m_AbilityButton;
+    public Button m_EndTurnButton;
     public bool m_SwitchCharacter = false;
     private int m_Turn = 1;
 
@@ -23,8 +24,7 @@ public class TurnManager : MonoBehaviour
         {
             if (m_Turn < m_Characters.Count)
             {
-                m_Characters[m_Turn - 1].gameObject.GetComponent<Renderer>().material.color = Color.white;
-                
+                m_Characters[m_Turn - 1].gameObject.GetComponent<Renderer>().material.color = Color.white;                
                 m_Characters[m_Turn].gameObject.GetComponent<Renderer>().material.color = Color.red;
                 m_Characters[m_Turn].GetComponent<EnemyController>().m_IsPlaying = true;
 
@@ -39,6 +39,7 @@ public class TurnManager : MonoBehaviour
                 m_AttackButton.interactable = true;
                 m_MoveButton.interactable = true;
                 m_AbilityButton.interactable = true;
+                m_EndTurnButton.interactable = true;
 
             }
             m_SwitchCharacter = false;

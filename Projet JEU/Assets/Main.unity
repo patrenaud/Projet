@@ -904,6 +904,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab9a498510d3e040ae251f767c3b96a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Turnmanager: {fileID: 655354275}
+  m_Player: {fileID: 725997614}
+  m_Attackable: 0
   m_IsPlaying: 0
   m_AttackZonePrefab: {fileID: 618242050}
 --- !u!4 &280815129 stripped
@@ -2449,6 +2452,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab9a498510d3e040ae251f767c3b96a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Turnmanager: {fileID: 655354275}
+  m_Player: {fileID: 725997614}
+  m_Attackable: 0
   m_IsPlaying: 0
   m_AttackZonePrefab: {fileID: 819343317}
 --- !u!1001 &632403162
@@ -2612,6 +2618,7 @@ MonoBehaviour:
   m_AttackButton: {fileID: 1286192205}
   m_MoveButton: {fileID: 1569288561}
   m_AbilityButton: {fileID: 1766768355}
+  m_EndTurnButton: {fileID: 1423861378}
   m_SwitchCharacter: 0
 --- !u!4 &655354276
 Transform:
@@ -4014,6 +4021,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab9a498510d3e040ae251f767c3b96a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Turnmanager: {fileID: 655354275}
+  m_Player: {fileID: 725997614}
+  m_Attackable: 0
   m_IsPlaying: 0
   m_AttackZonePrefab: {fileID: 1546072579}
 --- !u!1001 &1043620574
@@ -6103,6 +6113,11 @@ Prefab:
       propertyPath: m_Turnmanager
       value: 
       objectReference: {fileID: 655354275}
+    - target: {fileID: 114237241281702576, guid: 273da2ee1ec9a8d449fe95d6bb9f162c,
+        type: 2}
+      propertyPath: m_EndTurnButton
+      value: 
+      objectReference: {fileID: 1423861378}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 273da2ee1ec9a8d449fe95d6bb9f162c, type: 2}
   m_IsPrefabParent: 0
@@ -6166,18 +6181,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1369979214689970, guid: 13a1a1e1c1223a14f8142ece92f83c58,
     type: 2}
   m_PrefabInternal: {fileID: 973379821}
---- !u!114 &1546072584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1546072579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 300ee20269b229b48810b188204456d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Attackable: 0
 --- !u!1001 &1560822990
 Prefab:
   m_ObjectHideFlags: 0
@@ -7536,18 +7539,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1369979214689970, guid: 13a1a1e1c1223a14f8142ece92f83c58,
     type: 2}
   m_PrefabInternal: {fileID: 273475328}
---- !u!114 &2038438068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2038438063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 300ee20269b229b48810b188204456d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Attackable: 0
 --- !u!1001 &2085096672
 Prefab:
   m_ObjectHideFlags: 0
