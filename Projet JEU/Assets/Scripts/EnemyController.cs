@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public float m_AttackDamage = 10f;
     public TurnManager m_Turnmanager;
     public GameObject m_Player;
-    public bool m_Attackable = false;
-    public bool m_IsPlaying = false;
     public GameObject m_AttackZonePrefab;
+    public bool m_Attackable = false;
+    [HideInInspector]    
+    public bool m_IsPlaying = false;
+    
 
     private Vector3 m_NormalAttackZone;
 
@@ -29,17 +32,13 @@ public class EnemyController : MonoBehaviour
 
     private void EnemyAttack()
     {
-        m_IsPlaying = false; // Termine l'attaque de l'ennemi
-        Debug.Log("EnemyAttack");
-        //RaycastHit hit;
+        m_IsPlaying = false; // Termine l'activation des actions de l'ennemi
         StartCoroutine(EnemyAttackCoroutine());
+
         // Cette ligne permet de faire un Raycast de la grandeur du scale m'attackzoneprefab entre le player et l'ennemi.  Le size/2 trouve le rayon.
         if (Physics.Raycast(transform.position, (m_Player.transform.position - transform.position), m_AttackZonePrefab.transform.localScale.z / 2, LayerMask.GetMask("Player")))
-        {
-            Debug.DrawRay(transform.position, (m_Player.transform.position - transform.position), Color.red, m_AttackZonePrefab.transform.localScale.z / 2);
-            m_Player.transform.localScale -= new Vector3(0.3f, 0f, 0.3f);
-            Debug.Log("EnemyDamage");
-            // ApplyDamage();
+        { 
+            m_Player.GetComponent<PlayerController>().ApplyDamage(m_AttackDamage);
         }
     }
 
@@ -47,9 +46,10 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         m_AttackZonePrefab.transform.localScale = Vector3.zero;
-        m_Turnmanager.m_SwitchCharacter = true;
+        m_Turnmanager.m_SwitchCharacter = true; // Termine le tour de l'ennemi et envoi le tour au prochain du TurnManager
     }
 
+    // Les changements de couleurs et le changement du bool se font lorsque la zone d'attaque du joueur entre en collision avec els ennemis
     private void OnTriggerStay(Collider a_Other)
     {
         if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))
