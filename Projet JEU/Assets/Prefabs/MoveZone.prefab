@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33562401666746266}
   - component: {fileID: 136129219182577038}
   - component: {fileID: 23749697221222966}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: MoveZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,9 +35,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1693989826170746}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.2, y: 0.16, z: -3.6}
-  m_LocalScale: {x: 7, y: 0.1, z: 7}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.785, z: 0}
+  m_LocalScale: {x: 8, y: 0.1, z: 8}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -56,7 +56,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6477ba7a9b4161044be94f1ad61a54b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

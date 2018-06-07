@@ -11,12 +11,14 @@ public class EnemyController : MonoBehaviour
     public bool m_Attackable = false;
     [HideInInspector]    
     public bool m_IsPlaying = false;
+    public Material m_EnemyMaterial;
     
 
     private Vector3 m_NormalAttackZone;
 
     private void Start()
     {
+        m_EnemyMaterial.color = gameObject.GetComponent<Renderer>().material.color;
         m_NormalAttackZone = m_AttackZonePrefab.transform.localScale;
         m_AttackZonePrefab.transform.localScale = Vector3.zero;
     }
@@ -63,7 +65,7 @@ public class EnemyController : MonoBehaviour
     {
         if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))
         {
-            gameObject.GetComponent<Renderer>().material.color = Color.white;
+            gameObject.GetComponent<Renderer>().material.color =  m_EnemyMaterial.color;
             m_Attackable = false;
         }
     }

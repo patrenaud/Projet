@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public bool m_EndTurn = false;
     public Slider m_HealthBar;
+    public Slider m_XpBar;
     public Button m_AttackButton;
     public Button m_MoveButton;
     public Button m_AbilityButton;
@@ -24,8 +25,10 @@ public class PlayerController : MonoBehaviour
     public Button m_Ability2;
     public Button m_Ability3;
     public Button m_Ability4;
+    public Button m_LevelUpButton;
     public float m_MoveSpeed = 5f;
     public float m_MaxHealth = 100;
+    [HideInInspector]
     public float m_CurrentHealth;
     public GameObject m_MovePrefab;
     public GameObject m_AttackPrefab;
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 m_Position;
 
     private Vector3 m_NormalAttackZone;
+    private bool m_CanAttackBoss;
 
 
     private void Awake()
@@ -43,10 +47,12 @@ public class PlayerController : MonoBehaviour
         m_AttackPrefab.transform.localScale = Vector3.zero;
         m_CurrentHealth = m_MaxHealth;
         m_HealthBar.value = 1;
+        m_XpBar.value = 0f;
         m_Ability1.gameObject.SetActive(false);
         m_Ability2.gameObject.SetActive(false);
         m_Ability3.gameObject.SetActive(false);
         m_Ability4.gameObject.SetActive(false);
+        m_LevelUpButton.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -67,6 +73,11 @@ public class PlayerController : MonoBehaviour
         else if (m_EndTurn)
         {
             EndTurn();
+        }
+
+        if (m_XpBar.value >= 1)
+        {
+            m_LevelUpButton.gameObject.SetActive(true);
         }
     }
 
@@ -89,6 +100,11 @@ public class PlayerController : MonoBehaviour
                     //ApplyDamage(); // Le joueur peut attaquer un enemie dans sa zone de move seulement si elle est dans la zone d'attaque aussi
                     m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
                     Destroy(Hitinfo.collider.gameObject);
+                    m_XpBar.value += 0.40f;
+
+                    m_CanAttack = false;
+                    m_AttackButton.interactable = false;
+                    m_AttackPrefab.transform.localScale = Vector3.zero;
                 }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("UI")))
@@ -140,11 +156,27 @@ public class PlayerController : MonoBehaviour
                 {
                     //ApplyDamage();
                     m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
-                    Destroy(Hitinfo.collider.gameObject);  // Ceci est un fake pour montrer le kill de l'ennemi                
-                    gameObject.transform.localScale += new Vector3(1, 0, 1);
+                    Destroy(Hitinfo.collider.gameObject);  // Ceci est un fake pour montrer le kill de l'ennemi   
+                    m_XpBar.value += 0.40f;
+
                     m_CanAttack = false;
                     m_AttackButton.interactable = false;
                     m_AttackPrefab.transform.localScale = Vector3.zero;
+                }
+            }
+            else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")) && m_CanAttackBoss)
+            {
+                if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
+                {
+                    //ApplyDamage();
+                    m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
+                    Destroy(Hitinfo.collider.gameObject);  // Ceci est un fake pour montrer le kill de l'ennemi   
+                    m_XpBar.value += 0.40f;
+
+                    m_CanAttack = false;
+                    m_AttackButton.interactable = false;
+                    m_AttackPrefab.transform.localScale = Vector3.zero;
+                    Debug.Log("BOSS DEFEATED");
                 }
             }
         }
@@ -244,7 +276,17 @@ public class PlayerController : MonoBehaviour
     }
     public void ActivateAbility4()
     {
-
+        m_HealthBar.value += 0.15f;
+        m_Ability4.interactable = false;
     }
     #endregion
+
+
+    public void LevelUp()
+    {
+        gameObject.transform.localScale += new Vector3(1, 0, 1);
+        m_LevelUpButton.gameObject.SetActive(false);
+        m_XpBar.value = 0f;
+        m_CanAttackBoss = true;
+    }
 }
