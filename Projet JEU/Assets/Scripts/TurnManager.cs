@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class TurnManager : MonoBehaviour
 {
@@ -64,6 +66,7 @@ public class TurnManager : MonoBehaviour
         if(m_Characters.Count <=1)
         {
             Debug.Log("Win the game");
+            LoadLevel();            
         }
     }
 
@@ -71,5 +74,10 @@ public class TurnManager : MonoBehaviour
     public void ActivateSwitchCharacter()
     {
         m_SwitchCharacter = true;
+    }
+
+    public void LoadLevel()
+    {
+        SceneManager.LoadScene("Upgrades",LoadSceneMode.Single);
     }
 }

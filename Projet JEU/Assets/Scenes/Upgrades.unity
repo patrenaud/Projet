@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 47870161}
   - component: {fileID: 47870160}
   m_Layer: 5
-  m_Name: Button (12)
+  m_Name: Button Brute 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -524,18 +524,18 @@ RectTransform:
   - {fileID: 1601151852}
   - {fileID: 667886897}
   - {fileID: 842035198}
-  - {fileID: 525452103}
   - {fileID: 645800341}
+  - {fileID: 525452103}
   - {fileID: 1000910690}
   - {fileID: 287540055}
   - {fileID: 717649249}
-  - {fileID: 1678314095}
   - {fileID: 1512410378}
+  - {fileID: 1678314095}
   - {fileID: 47870159}
   - {fileID: 265455733}
   - {fileID: 1007031194}
-  - {fileID: 352924836}
   - {fileID: 1123527886}
+  - {fileID: 352924836}
   - {fileID: 1197619976}
   - {fileID: 614259833}
   - {fileID: 1328661064}
@@ -638,7 +638,7 @@ GameObject:
   - component: {fileID: 265455735}
   - component: {fileID: 265455734}
   m_Layer: 5
-  m_Name: Button (13)
+  m_Name: Button Brute 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -749,7 +749,7 @@ GameObject:
   - component: {fileID: 287540057}
   - component: {fileID: 287540056}
   m_Layer: 5
-  m_Name: Button (8)
+  m_Name: Button Athlete 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 352924838}
   - component: {fileID: 352924837}
   m_Layer: 5
-  m_Name: Button (15)
+  m_Name: Button Arcanist 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -878,7 +878,7 @@ RectTransform:
   m_Children:
   - {fileID: 1139119580}
   m_Father: {fileID: 173709075}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -970,7 +970,7 @@ GameObject:
   - component: {fileID: 387041374}
   - component: {fileID: 387041373}
   m_Layer: 5
-  m_Name: Brute
+  m_Name: Brute Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1044,7 +1044,7 @@ GameObject:
   - component: {fileID: 416498214}
   - component: {fileID: 416498213}
   m_Layer: 5
-  m_Name: Archer
+  m_Name: Archer Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1119,7 +1119,7 @@ GameObject:
   - component: {fileID: 461512643}
   - component: {fileID: 461512642}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Button Archer 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1230,7 +1230,7 @@ GameObject:
   - component: {fileID: 525452105}
   - component: {fileID: 525452104}
   m_Layer: 5
-  m_Name: Button (5)
+  m_Name: Button Athlete 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1248,7 +1248,7 @@ RectTransform:
   m_Children:
   - {fileID: 1643948992}
   m_Father: {fileID: 173709075}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1415,7 +1415,7 @@ GameObject:
   - component: {fileID: 614259835}
   - component: {fileID: 614259834}
   m_Layer: 5
-  m_Name: Button (18)
+  m_Name: Button Arcanist 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1591,7 +1591,7 @@ GameObject:
   - component: {fileID: 645800343}
   - component: {fileID: 645800342}
   m_Layer: 5
-  m_Name: Button (6)
+  m_Name: Button Athlete 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1609,7 +1609,7 @@ RectTransform:
   m_Children:
   - {fileID: 734674569}
   m_Father: {fileID: 173709075}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1702,7 +1702,7 @@ GameObject:
   - component: {fileID: 667886899}
   - component: {fileID: 667886898}
   m_Layer: 5
-  m_Name: Button (3)
+  m_Name: Button Archer 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1813,7 +1813,7 @@ GameObject:
   - component: {fileID: 717649251}
   - component: {fileID: 717649250}
   m_Layer: 5
-  m_Name: Button (9)
+  m_Name: Button Athlete 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1998,7 +1998,7 @@ GameObject:
   - component: {fileID: 842035200}
   - component: {fileID: 842035199}
   m_Layer: 5
-  m_Name: Button (4)
+  m_Name: Button Archer 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2338,7 +2338,7 @@ GameObject:
   - component: {fileID: 1000910692}
   - component: {fileID: 1000910691}
   m_Layer: 5
-  m_Name: Button (7)
+  m_Name: Button Athlete 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2449,7 +2449,7 @@ GameObject:
   - component: {fileID: 1007031196}
   - component: {fileID: 1007031195}
   m_Layer: 5
-  m_Name: Button (14)
+  m_Name: Button Brute 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2708,7 +2708,7 @@ GameObject:
   - component: {fileID: 1123527888}
   - component: {fileID: 1123527887}
   m_Layer: 5
-  m_Name: Button (16)
+  m_Name: Button Arcanist 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2726,7 +2726,7 @@ RectTransform:
   m_Children:
   - {fileID: 13295537}
   m_Father: {fileID: 173709075}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3040,7 +3040,7 @@ GameObject:
   - component: {fileID: 1190090529}
   - component: {fileID: 1190090528}
   m_Layer: 5
-  m_Name: Athlete
+  m_Name: Athlete Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3115,7 +3115,7 @@ GameObject:
   - component: {fileID: 1197619978}
   - component: {fileID: 1197619977}
   m_Layer: 5
-  m_Name: Button (17)
+  m_Name: Button Arcanist 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3300,7 +3300,7 @@ GameObject:
   - component: {fileID: 1328661066}
   - component: {fileID: 1328661065}
   m_Layer: 5
-  m_Name: Button (19)
+  m_Name: Button Arcanist 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3484,7 +3484,7 @@ GameObject:
   - component: {fileID: 1407466154}
   - component: {fileID: 1407466153}
   m_Layer: 5
-  m_Name: Arcanist
+  m_Name: Arcanist Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3559,7 +3559,7 @@ GameObject:
   - component: {fileID: 1512410380}
   - component: {fileID: 1512410379}
   m_Layer: 5
-  m_Name: Button (11)
+  m_Name: Button Brute 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3577,7 +3577,7 @@ RectTransform:
   m_Children:
   - {fileID: 1093610609}
   m_Father: {fileID: 173709075}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3670,7 +3670,7 @@ GameObject:
   - component: {fileID: 1544967624}
   - component: {fileID: 1544967623}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Button Archer 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3733,7 +3733,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1544967624}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2097436686}
+        m_MethodName: LoadMainScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1544967624
@@ -3855,7 +3866,7 @@ GameObject:
   - component: {fileID: 1601151854}
   - component: {fileID: 1601151853}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: Button Archer 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4040,7 +4051,7 @@ GameObject:
   - component: {fileID: 1678314097}
   - component: {fileID: 1678314096}
   m_Layer: 5
-  m_Name: Button (10)
+  m_Name: Button Brute 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4058,7 +4069,7 @@ RectTransform:
   m_Children:
   - {fileID: 897863697}
   m_Father: {fileID: 173709075}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4224,7 +4235,7 @@ GameObject:
   - component: {fileID: 1787851423}
   - component: {fileID: 1787851422}
   m_Layer: 5
-  m_Name: Upgrades
+  m_Name: Upgrades Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4435,6 +4446,46 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1943682181}
+--- !u!1 &2097436685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2097436687}
+  - component: {fileID: 2097436686}
+  m_Layer: 0
+  m_Name: Upgrade Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2097436686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2097436685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50897013f81b89b438296aefe70d0332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2097436687
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2097436685}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2118178205
 GameObject:
   m_ObjectHideFlags: 0
@@ -4502,7 +4553,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Unlock Range Attack
 --- !u!222 &2118178208
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -9,10 +9,9 @@ public class EnemyController : MonoBehaviour
     public GameObject m_Player;
     public GameObject m_AttackZonePrefab;
     public bool m_Attackable = false;
-    [HideInInspector]    
+    [HideInInspector]
     public bool m_IsPlaying = false;
-    public Material m_EnemyMaterial;
-    
+    public Material m_EnemyMaterial;    
 
     private Vector3 m_NormalAttackZone;
 
@@ -51,7 +50,7 @@ public class EnemyController : MonoBehaviour
         m_Turnmanager.m_SwitchCharacter = true; // Termine le tour de l'ennemi et envoi le tour au prochain du TurnManager
     }
 
-    // Les changements de couleurs et le changement du bool se font lorsque la zone d'attaque du joueur entre en collision avec els ennemis
+    // Les changements de couleurs et le changement du bool se font lorsque la zone d'attaque du joueur entre en collision avec les ennemis
     private void OnTriggerStay(Collider a_Other)
     {
         if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))

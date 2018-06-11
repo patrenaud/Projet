@@ -15,9 +15,12 @@ public class PlayerController : MonoBehaviour
     public bool m_CanAbility = false;
     [HideInInspector]
     public bool m_EndTurn = false;
+    public bool m_RangeAttack = false;
     public Slider m_HealthBar;
     public Slider m_XpBar;
     public Button m_AttackButton;
+    public Button m_MeleeAttackButton;
+    public Button m_RangeAttackButton;
     public Button m_MoveButton;
     public Button m_AbilityButton;
     public Button m_EndTurnButton;
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
     public Button m_LevelUpButton;
     public float m_MoveSpeed = 5f;
     public float m_MaxHealth = 100;
+    public float m_HealthRegenAbility = 0.25f;
     [HideInInspector]
     public float m_CurrentHealth;
     public GameObject m_MovePrefab;
@@ -38,7 +42,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 m_NormalAttackZone;
     private bool m_CanAttackBoss;
-
 
     private void Awake()
     {
@@ -53,6 +56,8 @@ public class PlayerController : MonoBehaviour
         m_Ability3.gameObject.SetActive(false);
         m_Ability4.gameObject.SetActive(false);
         m_LevelUpButton.gameObject.SetActive(false);
+        m_RangeAttackButton.gameObject.SetActive(false);
+        m_MeleeAttackButton.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -64,7 +69,14 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_CanAttack)
         {
-            Attack();
+            if (!m_RangeAttack)
+            {
+                MeleeAttack();
+            }
+            else
+            {
+                RangeAttack();
+            }
         }
         else if (m_CanAbility)
         {
@@ -143,7 +155,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Permet l'attaque du joueur vers l'ennemi
-    public void Attack()
+    public void MeleeAttack()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -166,6 +178,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")) && m_CanAttackBoss)
             {
+                // This part is the condition to defeat the Boss
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
                     //ApplyDamage();
@@ -176,10 +189,17 @@ public class PlayerController : MonoBehaviour
                     m_CanAttack = false;
                     m_AttackButton.interactable = false;
                     m_AttackPrefab.transform.localScale = Vector3.zero;
-                    Debug.Log("BOSS DEFEATED");
+                }
+                else
+                {
+                    Debug.Log("Can't attack");
                 }
             }
         }
+    }
+    public void RangeAttack()
+    {
+
     }
 
     public void ApplyDamage(float i_AttackDamage)
@@ -187,9 +207,9 @@ public class PlayerController : MonoBehaviour
         // Place to Apply damage
         m_CurrentHealth -= i_AttackDamage;
         m_HealthBar.value = m_CurrentHealth / m_MaxHealth;
-        StartCoroutine(ApplyDamageAnim());
+        StartCoroutine(ApplyDamageFeedback());
     }
-    private IEnumerator ApplyDamageAnim()
+    private IEnumerator ApplyDamageFeedback()
     {
         gameObject.GetComponent<Renderer>().material.color = Color.red;
         yield return new WaitForSeconds(0.2f);
@@ -232,17 +252,44 @@ public class PlayerController : MonoBehaviour
     }
     public void ActivateAttack()
     {
-        if (m_CanAttack)
+        if (!m_RangeAttack)
         {
-            m_AttackPrefab.transform.localScale = Vector3.zero;
-            m_CanAttack = false;
+            if (m_CanAttack)
+            {
+                m_AttackPrefab.transform.localScale = Vector3.zero;
+                m_CanAttack = false;
+            }
+            else if (!m_CanAttack)
+            {
+                m_CanAttack = true;
+                m_AttackPrefab.transform.localScale = m_NormalAttackZone;
+            }
         }
-        else if (!m_CanAttack)
+        else
         {
-            m_CanAttack = true;
-            m_AttackPrefab.transform.localScale = m_NormalAttackZone;
+            m_RangeAttackButton.gameObject.SetActive(true);
+            m_MeleeAttackButton.gameObject.SetActive(true);
+            if (m_CanAttack)
+            {
+                m_AttackPrefab.transform.localScale = Vector3.zero;
+                m_RangeAttackButton.gameObject.SetActive(false);
+                m_MeleeAttackButton.gameObject.SetActive(false);
+                m_CanAttack = false;
+            }
+            else if (!m_CanAttack)
+            {
+                m_CanAttack = true;
+                m_AttackPrefab.transform.localScale = m_NormalAttackZone;
+            }
+
         }
     }
+
+    public void ActivateRangeAttack()
+    {
+        m_RangeAttack = true;
+    }
+
     public void ActivateHabilty()
     {
         if (m_CanAbility)
@@ -264,19 +311,19 @@ public class PlayerController : MonoBehaviour
     }
     public void ActivateAbility1()
     {
-
+        // Has to be filled with Abilities
     }
     public void ActivateAbility2()
     {
-
+        // Has to be filled with Abilities
     }
     public void ActivateAbility3()
     {
-
+        // Has to be filled with Abilities
     }
     public void ActivateAbility4()
     {
-        m_HealthBar.value += 0.15f;
+        m_HealthBar.value += m_HealthRegenAbility;
         m_Ability4.interactable = false;
     }
     #endregion
