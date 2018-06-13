@@ -363,6 +363,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 142328323}
+--- !u!1 &153892448 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1232894202961404, guid: 273da2ee1ec9a8d449fe95d6bb9f162c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1520886765}
 --- !u!1001 &164422525
 Prefab:
   m_ObjectHideFlags: 0
@@ -7281,6 +7286,28 @@ Prefab:
       propertyPath: m_RangeAttackButton
       value: 
       objectReference: {fileID: 1254806860}
+    - target: {fileID: 114237241281702576, guid: 273da2ee1ec9a8d449fe95d6bb9f162c,
+        type: 2}
+      propertyPath: m_MoveZone
+      value: 
+      objectReference: {fileID: 153892448}
+    - target: {fileID: 114237241281702576, guid: 273da2ee1ec9a8d449fe95d6bb9f162c,
+        type: 2}
+      propertyPath: m_AttackZone
+      value: 
+      objectReference: {fileID: 1594580994}
+    - target: {fileID: 114237241281702576, guid: 273da2ee1ec9a8d449fe95d6bb9f162c,
+        type: 2}
+      propertyPath: m_RangeAttackZone
+      value: 
+      objectReference: {fileID: 1734864104243478, guid: 4f5e2f8141659c2448a8a29b1609227d,
+        type: 2}
+    - target: {fileID: 114237241281702576, guid: 273da2ee1ec9a8d449fe95d6bb9f162c,
+        type: 2}
+      propertyPath: m_PlayerData
+      value: 
+      objectReference: {fileID: 11400000, guid: b079e6fc77528074b95b831d815a336b,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 273da2ee1ec9a8d449fe95d6bb9f162c, type: 2}
   m_IsPrefabParent: 0
@@ -7800,6 +7827,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1583658450}
+--- !u!1 &1594580994 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1147134082085306, guid: 273da2ee1ec9a8d449fe95d6bb9f162c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1520886765}
 --- !u!1001 &1611839343
 Prefab:
   m_ObjectHideFlags: 0

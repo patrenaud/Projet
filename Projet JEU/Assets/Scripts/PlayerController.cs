@@ -29,28 +29,28 @@ public class PlayerController : MonoBehaviour
     public Button m_Ability3;
     public Button m_Ability4;
     public Button m_LevelUpButton;
-    public float m_MoveSpeed = 5f;
-    public float m_MaxHealth = 100;
-    public float m_HealthRegenAbility = 0.25f;
+
     [HideInInspector]
     public float m_CurrentHealth;
-    public GameObject m_MovePrefab;
-    public GameObject m_AttackPrefab;
+    public GameObject m_MoveZone;
+    public GameObject m_AttackZone;
+    public GameObject m_RangeAttackZone;
     public Material m_PlayerMaterial;
     [HideInInspector]
-    public Vector3 m_Position;
+    public Vector3 m_TargetPosition;
 
-    private Vector3 m_NormalAttackZone;
+    [SerializeField]
+    private PlayerData m_PlayerData;
+    private Vector3 m_ScaleOfAttackZone;
+    private Vector3 m_ScaleOfRangeAttackZone;
     private bool m_CanAttackBoss;
+    private float m_MoveSpeed;
+    private float m_MaxHealth;
+    private float m_HealthRegenAbility;
 
     private void Awake()
     {
-        m_MovePrefab.SetActive(false);
-        m_NormalAttackZone = m_AttackPrefab.transform.localScale;
-        m_AttackPrefab.transform.localScale = Vector3.zero;
-        m_CurrentHealth = m_MaxHealth;
-        m_HealthBar.value = 1;
-        m_XpBar.value = 0f;
+        
         m_Ability1.gameObject.SetActive(false);
         m_Ability2.gameObject.SetActive(false);
         m_Ability3.gameObject.SetActive(false);
@@ -58,6 +58,21 @@ public class PlayerController : MonoBehaviour
         m_LevelUpButton.gameObject.SetActive(false);
         m_RangeAttackButton.gameObject.SetActive(false);
         m_MeleeAttackButton.gameObject.SetActive(false);
+        m_MoveZone.SetActive(false);
+
+        m_ScaleOfAttackZone = m_AttackZone.transform.localScale * m_PlayerData.MeleeAttackRange;
+        m_AttackZone.transform.localScale = Vector3.zero;
+    }
+
+    private void Start()
+    {
+        m_MoveSpeed = m_PlayerData.MoveSpeed;
+        m_MaxHealth = m_PlayerData.MaxHealth;
+        m_HealthRegenAbility = m_PlayerData.HealthRegenAbility;
+
+        m_CurrentHealth = m_MaxHealth;
+        m_HealthBar.value = 1;
+        m_XpBar.value = 0f;
     }
 
     private void Update()
@@ -69,14 +84,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_CanAttack)
         {
-            if (!m_RangeAttack)
-            {
-                MeleeAttack();
-            }
-            else
-            {
-                RangeAttack();
-            }
+            MeleeAttack();
         }
         else if (m_CanAbility)
         {
@@ -116,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
                     m_CanAttack = false;
                     m_AttackButton.interactable = false;
-                    m_AttackPrefab.transform.localScale = Vector3.zero;
+                    m_AttackZone.transform.localScale = Vector3.zero;
                 }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("UI")))
@@ -127,14 +135,14 @@ public class PlayerController : MonoBehaviour
             // Permet le move seulement si le click est dans la MoveZone et sur le Ground 
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Ground")) && Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("MoveZone")))
             {
-                m_Position.x = Hitinfo.point.x;
-                m_Position.z = Hitinfo.point.z;
-                m_Position.y = transform.position.y;
+                m_TargetPosition.x = Hitinfo.point.x;
+                m_TargetPosition.z = Hitinfo.point.z;
+                m_TargetPosition.y = transform.position.y;
 
                 StartCoroutine(MovetoPoint()); // Lorsque les conditions sont 
                 m_CanMove = false;
                 m_MoveButton.interactable = false;
-                m_MovePrefab.SetActive(false);
+                m_MoveZone.SetActive(false);
             }
         }
     }
@@ -144,11 +152,11 @@ public class PlayerController : MonoBehaviour
     {
         float Timer = 0f;
         {
-            transform.LookAt(m_Position);
-            while (Vector3.Distance(m_Position, transform.position) > 0)
+            transform.LookAt(m_TargetPosition);
+            while (Vector3.Distance(m_TargetPosition, transform.position) > 0)
             {
-                transform.position = Vector3.Lerp(transform.position, m_Position, Timer);
-                Timer += Time.deltaTime;
+                transform.position = Vector3.Lerp(transform.position, m_TargetPosition, Timer);
+                Timer += Time.deltaTime * m_MoveSpeed/60;
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -173,7 +181,7 @@ public class PlayerController : MonoBehaviour
 
                     m_CanAttack = false;
                     m_AttackButton.interactable = false;
-                    m_AttackPrefab.transform.localScale = Vector3.zero;
+                    m_AttackZone.transform.localScale = Vector3.zero;
                 }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")) && m_CanAttackBoss)
@@ -188,7 +196,7 @@ public class PlayerController : MonoBehaviour
 
                     m_CanAttack = false;
                     m_AttackButton.interactable = false;
-                    m_AttackPrefab.transform.localScale = Vector3.zero;
+                    m_AttackZone.transform.localScale = Vector3.zero;
                 }
                 else
                 {
@@ -196,10 +204,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-    }
-    public void RangeAttack()
-    {
-
     }
 
     public void ApplyDamage(float i_AttackDamage)
@@ -241,47 +245,27 @@ public class PlayerController : MonoBehaviour
     {
         if (m_CanMove)
         {
-            m_MovePrefab.SetActive(false);
+            m_MoveZone.SetActive(false);
             m_CanMove = false;
         }
         else if (!m_CanMove)
         {
             m_CanMove = true;
-            m_MovePrefab.SetActive(true);
+            m_MoveZone.SetActive(true);
         }
     }
     public void ActivateAttack()
     {
-        if (!m_RangeAttack)
-        {
-            if (m_CanAttack)
-            {
-                m_AttackPrefab.transform.localScale = Vector3.zero;
-                m_CanAttack = false;
-            }
-            else if (!m_CanAttack)
-            {
-                m_CanAttack = true;
-                m_AttackPrefab.transform.localScale = m_NormalAttackZone;
-            }
-        }
-        else
-        {
-            m_RangeAttackButton.gameObject.SetActive(true);
-            m_MeleeAttackButton.gameObject.SetActive(true);
-            if (m_CanAttack)
-            {
-                m_AttackPrefab.transform.localScale = Vector3.zero;
-                m_RangeAttackButton.gameObject.SetActive(false);
-                m_MeleeAttackButton.gameObject.SetActive(false);
-                m_CanAttack = false;
-            }
-            else if (!m_CanAttack)
-            {
-                m_CanAttack = true;
-                m_AttackPrefab.transform.localScale = m_NormalAttackZone;
-            }
 
+        if (m_CanAttack)
+        {
+           m_AttackZone.transform.localScale = Vector3.zero;
+            m_CanAttack = false;
+        }
+        else if (!m_CanAttack)
+        {
+            m_CanAttack = true;
+            m_AttackZone.transform.localScale = m_ScaleOfAttackZone;
         }
     }
 
