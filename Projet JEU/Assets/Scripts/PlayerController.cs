@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public bool m_EndTurn = false;
     public bool m_RangeAttack = false;
+    public bool m_CanAttackBoss;
     public Slider m_HealthBar;
     public Slider m_XpBar;
     public Button m_AttackButton;
@@ -29,28 +30,30 @@ public class PlayerController : MonoBehaviour
     public Button m_Ability3;
     public Button m_Ability4;
     public Button m_LevelUpButton;
-
     [HideInInspector]
     public float m_CurrentHealth;
+    public GameObject m_UpgradeCanvas;
     public GameObject m_MoveZone;
     public GameObject m_AttackZone;
     public GameObject m_RangeAttackZone;
     public Material m_PlayerMaterial;
     [HideInInspector]
     public Vector3 m_TargetPosition;
+    
 
     [SerializeField]
     private PlayerData m_PlayerData;
     private Vector3 m_ScaleOfAttackZone;
     private Vector3 m_ScaleOfRangeAttackZone;
-    private bool m_CanAttackBoss;
+    private bool m_MeleeButtonIsPressed = false;
+    private bool m_RangeButtonIsPressed = false;
     private float m_MoveSpeed;
     private float m_MaxHealth;
     private float m_HealthRegenAbility;
 
     private void Awake()
     {
-        
+        m_UpgradeCanvas.gameObject.SetActive(false);
         m_Ability1.gameObject.SetActive(false);
         m_Ability2.gameObject.SetActive(false);
         m_Ability3.gameObject.SetActive(false);
@@ -61,7 +64,9 @@ public class PlayerController : MonoBehaviour
         m_MoveZone.SetActive(false);
 
         m_ScaleOfAttackZone = m_AttackZone.transform.localScale * m_PlayerData.MeleeAttackRange;
+        m_ScaleOfRangeAttackZone = m_RangeAttackZone.transform.localScale * m_PlayerData.RangeAttackRange;
         m_AttackZone.transform.localScale = Vector3.zero;
+        m_RangeAttackZone.transform.localScale = Vector3.zero;
     }
 
     private void Start()
@@ -84,7 +89,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_CanAttack)
         {
-            MeleeAttack();
+            Attack();
         }
         else if (m_CanAbility)
         {
@@ -118,13 +123,7 @@ public class PlayerController : MonoBehaviour
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
                     //ApplyDamage(); // Le joueur peut attaquer un enemie dans sa zone de move seulement si elle est dans la zone d'attaque aussi
-                    m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
-                    Destroy(Hitinfo.collider.gameObject);
-                    m_XpBar.value += 0.40f;
-
-                    m_CanAttack = false;
-                    m_AttackButton.interactable = false;
-                    m_AttackZone.transform.localScale = Vector3.zero;
+                    AttackEnd(Hitinfo);
                 }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("UI")))
@@ -132,14 +131,14 @@ public class PlayerController : MonoBehaviour
                 // Si le joueur click à nouveau sur le bouton Move, il annule son mouvement.
                 m_CanMove = false;
             }
-            // Permet le move seulement si le click est dans la MoveZone et sur le Ground 
+            // Permet le move seulement si le click est dans la MoveZone et sur le Ground
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Ground")) && Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("MoveZone")))
             {
                 m_TargetPosition.x = Hitinfo.point.x;
                 m_TargetPosition.z = Hitinfo.point.z;
                 m_TargetPosition.y = transform.position.y;
 
-                StartCoroutine(MovetoPoint()); // Lorsque les conditions sont 
+                StartCoroutine(MovetoPoint()); // Lorsque les conditions sont
                 m_CanMove = false;
                 m_MoveButton.interactable = false;
                 m_MoveZone.SetActive(false);
@@ -156,14 +155,14 @@ public class PlayerController : MonoBehaviour
             while (Vector3.Distance(m_TargetPosition, transform.position) > 0)
             {
                 transform.position = Vector3.Lerp(transform.position, m_TargetPosition, Timer);
-                Timer += Time.deltaTime * m_MoveSpeed/60;
+                Timer += Time.deltaTime * m_MoveSpeed / 60;
                 yield return new WaitForEndOfFrame();
             }
         }
     }
 
     // Permet l'attaque du joueur vers l'ennemi
-    public void MeleeAttack()
+    public void Attack()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -175,13 +174,7 @@ public class PlayerController : MonoBehaviour
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
                     //ApplyDamage();
-                    m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
-                    Destroy(Hitinfo.collider.gameObject);  // Ceci est un fake pour montrer le kill de l'ennemi   
-                    m_XpBar.value += 0.40f;
-
-                    m_CanAttack = false;
-                    m_AttackButton.interactable = false;
-                    m_AttackZone.transform.localScale = Vector3.zero;
+                    AttackEnd(Hitinfo);
                 }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")) && m_CanAttackBoss)
@@ -190,13 +183,7 @@ public class PlayerController : MonoBehaviour
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
                     //ApplyDamage();
-                    m_Turnmanager.m_Characters.Remove(Hitinfo.collider.gameObject);
-                    Destroy(Hitinfo.collider.gameObject);  // Ceci est un fake pour montrer le kill de l'ennemi   
-                    m_XpBar.value += 0.40f;
-
-                    m_CanAttack = false;
-                    m_AttackButton.interactable = false;
-                    m_AttackZone.transform.localScale = Vector3.zero;
+                    AttackEnd(Hitinfo);
                 }
                 else
                 {
@@ -204,6 +191,22 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void AttackEnd(RaycastHit i_Hitinfo)
+    {
+        m_Turnmanager.m_Characters.Remove(i_Hitinfo.collider.gameObject);
+        Destroy(i_Hitinfo.collider.gameObject);  // Ceci est un fake pour montrer le kill de l'ennemi   
+        m_XpBar.value += 0.40f;
+
+        m_CanAttack = false;
+        m_AttackButton.interactable = false;
+        m_AttackZone.transform.localScale = Vector3.zero;
+        m_RangeAttackZone.transform.localScale = Vector3.zero;
+        m_MeleeAttackButton.gameObject.SetActive(false);
+        m_RangeAttackButton.gameObject.SetActive(false);
+        m_MeleeButtonIsPressed = false;
+        m_RangeButtonIsPressed = false;
     }
 
     public void ApplyDamage(float i_AttackDamage)
@@ -238,7 +241,6 @@ public class PlayerController : MonoBehaviour
         m_EndTurnButton.interactable = false;
     }
 
-
     // Cette région permet aux boutons d'appaler ces fonctions. Les Booleens sont activés et permettent les Move/Attack/Ability/EndTurn
     #region Activatables
     public void ActivateMove()
@@ -256,22 +258,48 @@ public class PlayerController : MonoBehaviour
     }
     public void ActivateAttack()
     {
+        if (!m_RangeAttack)
+        {
+            if (m_CanAttack)
+            {
+                m_CanAttack = false;
+                m_AttackZone.transform.localScale = Vector3.zero;
+            }
+            else if (!m_CanAttack)
+            {
+                m_CanAttack = true;
+                m_AttackZone.transform.localScale = m_ScaleOfAttackZone;
+            }
+        }
+        else
+        {
+            if (m_CanAttack)
+            {
+                m_CanAttack = false;
 
-        if (m_CanAttack)
-        {
-           m_AttackZone.transform.localScale = Vector3.zero;
-            m_CanAttack = false;
+                m_MeleeAttackButton.gameObject.SetActive(false);
+                m_RangeAttackButton.gameObject.SetActive(false);
+            }
+            else if (!m_CanAttack)
+            {
+                m_CanAttack = true;
+
+                m_MeleeAttackButton.gameObject.SetActive(true);
+                m_RangeAttackButton.gameObject.SetActive(true);
+            }
         }
-        else if (!m_CanAttack)
-        {
-            m_CanAttack = true;
-            m_AttackZone.transform.localScale = m_ScaleOfAttackZone;
-        }
+    }
+
+    public void ActivateMeleeAttack()
+    {
+        m_MeleeButtonIsPressed = !m_MeleeButtonIsPressed;
+        m_AttackZone.transform.localScale = m_MeleeButtonIsPressed ? m_ScaleOfAttackZone : Vector3.zero;
     }
 
     public void ActivateRangeAttack()
     {
-        m_RangeAttack = true;
+        m_RangeButtonIsPressed = !m_RangeButtonIsPressed;
+        m_RangeAttackZone.transform.localScale = m_RangeButtonIsPressed ? m_ScaleOfRangeAttackZone : Vector3.zero;
     }
 
     public void ActivateHabilty()
@@ -312,12 +340,8 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-
     public void LevelUp()
     {
-        gameObject.transform.localScale += new Vector3(1, 0, 1);
-        m_LevelUpButton.gameObject.SetActive(false);
-        m_XpBar.value = 0f;
-        m_CanAttackBoss = true;
+        m_UpgradeCanvas.gameObject.SetActive(true);
     }
 }

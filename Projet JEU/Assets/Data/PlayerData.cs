@@ -9,14 +9,14 @@ public class PlayerData : ScriptableObject
     private float m_MeleeAttackRange = 1;
     public float MeleeAttackRange
     {
-        get{ return m_MeleeAttackRange ;}
+        get { return m_MeleeAttackRange; }
     }
 
     [SerializeField]
     private float m_RangeAttackRange = 1;
     public float RangeAttackRange
     {
-        get{ return m_RangeAttackRange ;}
+        get { return m_RangeAttackRange; }
     }
 
     [SerializeField]
@@ -27,18 +27,16 @@ public class PlayerData : ScriptableObject
     }
 
     [SerializeField]
-    public float m_MaxHealth = 100;
+    private float m_MaxHealth = 100;
     public float MaxHealth
     {
         get { return m_MaxHealth; }
     }
 
     [SerializeField]
-    public float m_HealthRegenAbility = 0.25f;
+    private float m_HealthRegenAbility = 0.25f;
     public float HealthRegenAbility
     {
         get { return m_HealthRegenAbility; }
     }
-
-
 }
