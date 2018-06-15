@@ -78,6 +78,6 @@ public class TurnManager : MonoBehaviour
 
     public void LoadLevel()
     {
-        SceneManager.LoadScene("Upgrades",LoadSceneMode.Single);
+        SceneManager.LoadScene("Main",LoadSceneMode.Single);
     }
 }
