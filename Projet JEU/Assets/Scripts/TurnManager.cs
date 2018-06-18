@@ -12,6 +12,8 @@ public class TurnManager : MonoBehaviour
     public Button m_MoveButton;
     public Button m_AbilityButton;
     public Button m_EndTurnButton;
+    public Button m_MeleeAttackButton;
+    public Button m_RangeAttackButton;
     public bool m_SwitchCharacter = false;
 
     private int m_Turn = 1;
@@ -24,14 +26,14 @@ public class TurnManager : MonoBehaviour
 
     private void Awake() // Application d'un Singleton
     {
-        if(m_Instance != null)
+        if (m_Instance != null)
         {
             Destroy(gameObject);
         }
         else
         {
             m_Instance = this;
-        }        
+        }
     }
 
 
@@ -58,15 +60,17 @@ public class TurnManager : MonoBehaviour
                 m_MoveButton.interactable = true;
                 m_AbilityButton.interactable = true;
                 m_EndTurnButton.interactable = true;
-
+                m_MeleeAttackButton.interactable = true;
+                m_RangeAttackButton.interactable = true;
+                
             }
             m_SwitchCharacter = false;
         }
 
-        if(m_Characters.Count <=1)
+        if (m_Characters.Count <= 1)
         {
             Debug.Log("Win the game");
-            LoadLevel();            
+            LoadLevel();
         }
     }
 
@@ -78,6 +82,6 @@ public class TurnManager : MonoBehaviour
 
     public void LoadLevel()
     {
-        SceneManager.LoadScene("Main",LoadSceneMode.Single);
+        SceneManager.LoadScene("Main", LoadSceneMode.Single);
     }
 }

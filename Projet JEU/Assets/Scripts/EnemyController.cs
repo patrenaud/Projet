@@ -54,7 +54,7 @@ public class EnemyController : MonoBehaviour
     private void OnTriggerStay(Collider a_Other)
     {
         if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))
-        {
+        {            
             gameObject.GetComponent<Renderer>().material.color = Color.yellow;
             m_Attackable = true;
         }

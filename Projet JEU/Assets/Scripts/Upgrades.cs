@@ -18,6 +18,5 @@ public class Upgrades : MonoBehaviour
         m_PlayerController.m_UpgradeCanvas.gameObject.SetActive(false);
         m_PlayerController.m_LevelUpButton.gameObject.SetActive(false);
         m_PlayerController.m_XpBar.value = 0f;
-        m_PlayerController.m_CanAttackBoss = true;
     }
 }

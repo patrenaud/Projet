@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public bool m_EndTurn = false;
     public bool m_RangeAttack = false;
-    public bool m_CanAttackBoss;
     public Slider m_HealthBar;
     public Slider m_XpBar;
     public Button m_AttackButton;
@@ -39,7 +38,7 @@ public class PlayerController : MonoBehaviour
     public Material m_PlayerMaterial;
     [HideInInspector]
     public Vector3 m_TargetPosition;
-    
+
 
     [SerializeField]
     private PlayerData m_PlayerData;
@@ -173,11 +172,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
+                
                     //ApplyDamage();
                     AttackEnd(Hitinfo);
                 }
             }
-            else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")) && m_CanAttackBoss)
+            else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")))
             {
                 // This part is the condition to defeat the Boss
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
@@ -193,10 +193,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Ceci est pour un feedback de la mort de l'ennemi
+    private IEnumerator DestroyEnemy(RaycastHit i_Hitinfo)
+    {
+        for (int i = 9; i > 0; i--)
+        {
+            i_Hitinfo.collider.gameObject.transform.localScale -= new Vector3(0.1F, 0.1f, 0.1f);
+            yield return new WaitForSeconds(0.1f);
+        }
+        
+        m_Turnmanager.m_Characters.Remove(i_Hitinfo.collider.gameObject);
+        Destroy(i_Hitinfo.collider.gameObject);
+    }
+
     private void AttackEnd(RaycastHit i_Hitinfo)
     {
-        m_Turnmanager.m_Characters.Remove(i_Hitinfo.collider.gameObject);
-        Destroy(i_Hitinfo.collider.gameObject);  // Ceci est un fake pour montrer le kill de l'ennemi   
+  
+        StartCoroutine(DestroyEnemy(i_Hitinfo)); // This is to call Death Animation for Enemies
+
         m_XpBar.value += 0.40f;
 
         m_CanAttack = false;
@@ -214,12 +228,14 @@ public class PlayerController : MonoBehaviour
         // Place to Apply damage
         m_CurrentHealth -= i_AttackDamage;
         m_HealthBar.value = m_CurrentHealth / m_MaxHealth;
+
+        // ICI ON DOIT APPELER UNE COROUTINE POUR INSTAURER LE PROJECTILE ET LE DOMMAGE EST APPELER À LA FIN DE CELLE-CI
         StartCoroutine(ApplyDamageFeedback());
     }
     private IEnumerator ApplyDamageFeedback()
     {
         gameObject.GetComponent<Renderer>().material.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         gameObject.GetComponent<Renderer>().material.color = m_PlayerMaterial.color;
     }
 
@@ -239,6 +255,10 @@ public class PlayerController : MonoBehaviour
         m_MoveButton.interactable = false;
         m_AbilityButton.interactable = false;
         m_EndTurnButton.interactable = false;
+        m_MeleeAttackButton.interactable = false;
+        m_RangeAttackButton.interactable = false;
+        m_AttackZone.transform.localScale = Vector3.zero;
+        m_RangeAttackZone.transform.localScale = Vector3.zero;
     }
 
     // Cette région permet aux boutons d'appaler ces fonctions. Les Booleens sont activés et permettent les Move/Attack/Ability/EndTurn
@@ -293,12 +313,14 @@ public class PlayerController : MonoBehaviour
     public void ActivateMeleeAttack()
     {
         m_MeleeButtonIsPressed = !m_MeleeButtonIsPressed;
+        // Operateur ternaire determine le scale de la zone du MeleeAttack lorsque l'on appui sur le bouton Attack
         m_AttackZone.transform.localScale = m_MeleeButtonIsPressed ? m_ScaleOfAttackZone : Vector3.zero;
     }
 
     public void ActivateRangeAttack()
     {
         m_RangeButtonIsPressed = !m_RangeButtonIsPressed;
+        // Operateur ternaire determine le scale de la zone ddu RangeAttack lorsque l'on appui sur le bouton Attack
         m_RangeAttackZone.transform.localScale = m_RangeButtonIsPressed ? m_ScaleOfRangeAttackZone : Vector3.zero;
     }
 
