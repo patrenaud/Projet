@@ -42,7 +42,7 @@ public class EnemyController : MonoBehaviour
             m_Player.GetComponent<PlayerController>().ApplyDamage(m_AttackDamage);
         }
     }
-
+    
     private IEnumerator EnemyAttackCoroutine()
     {
         yield return new WaitForSeconds(2f);
@@ -53,13 +53,14 @@ public class EnemyController : MonoBehaviour
     // Les changements de couleurs et le changement du bool se font lorsque la zone d'attaque du joueur entre en collision avec les ennemis
     private void OnTriggerStay(Collider a_Other)
     {
-        if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))
+        if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible") )
         {            
             gameObject.GetComponent<Renderer>().material.color = Color.yellow;
             m_Attackable = true;
         }
     }
-
+    
+    // Lorsque la zone d'attaque quitte l'ennemi, il reprend sa couleur d'avant
     private void OnTriggerExit(Collider a_Other)
     {
         if (a_Other.gameObject.layer == LayerMask.NameToLayer("Interractible"))

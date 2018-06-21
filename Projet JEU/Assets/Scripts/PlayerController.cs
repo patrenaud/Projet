@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-
     public TurnManager m_Turnmanager;
     [HideInInspector]
     public bool m_CanMove = false;
@@ -18,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public bool m_RangeAttack = false;
     public Slider m_HealthBar;
     public Slider m_XpBar;
+    #region Button List
+    [Header("Button List")]
     public Button m_AttackButton;
     public Button m_MeleeAttackButton;
     public Button m_RangeAttackButton;
@@ -29,21 +30,21 @@ public class PlayerController : MonoBehaviour
     public Button m_Ability3;
     public Button m_Ability4;
     public Button m_LevelUpButton;
+    #endregion
     [HideInInspector]
     public float m_CurrentHealth;
     public GameObject m_UpgradeCanvas;
+    [Header("Player Zones")]
     public GameObject m_MoveZone;
     public GameObject m_AttackZone;
     public GameObject m_RangeAttackZone;
     public Material m_PlayerMaterial;
-    [HideInInspector]
-    public Vector3 m_TargetPosition;
-
 
     [SerializeField]
     private PlayerData m_PlayerData;
     private Vector3 m_ScaleOfAttackZone;
     private Vector3 m_ScaleOfRangeAttackZone;
+    private Vector3 m_TargetPosition;
     private bool m_MeleeButtonIsPressed = false;
     private bool m_RangeButtonIsPressed = false;
     private float m_MoveSpeed;
@@ -103,6 +104,11 @@ public class PlayerController : MonoBehaviour
         {
             m_LevelUpButton.gameObject.SetActive(true);
         }
+
+        if (m_HealthBar.value <= 0)
+        {
+            m_Turnmanager.LoadMain();
+        }
     }
 
     public void Move()
@@ -121,7 +127,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
-                    //ApplyDamage(); // Le joueur peut attaquer un enemie dans sa zone de move seulement si elle est dans la zone d'attaque aussi
+                    //ApplyDamage(); // Le joueur peut attaquer un ennemi dans sa zone de move seulement si elle est dans la zone d'attaque aussi
                     AttackEnd(Hitinfo);
                 }
             }
@@ -141,6 +147,7 @@ public class PlayerController : MonoBehaviour
                 m_CanMove = false;
                 m_MoveButton.interactable = false;
                 m_MoveZone.SetActive(false);
+
             }
         }
     }
@@ -150,6 +157,7 @@ public class PlayerController : MonoBehaviour
     {
         float Timer = 0f;
         {
+            // ****** Ce céplacement devra être changé par le NavMesh. Si le click est hors zone, ne confirmation sera demandée pour la distance max
             transform.LookAt(m_TargetPosition);
             while (Vector3.Distance(m_TargetPosition, transform.position) > 0)
             {
@@ -172,43 +180,29 @@ public class PlayerController : MonoBehaviour
             {
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
-                
                     //ApplyDamage();
+                    AttackEnd(Hitinfo);
+                }
+            }
+            // Doit être niveau 2 du prototype pour attacker le Boss.
+            else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")) && m_RangeAttack)
+            {
+                // This part is the condition to defeat the Boss
+                if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
+                {
+                    //ApplyDamage();                    
                     AttackEnd(Hitinfo);
                 }
             }
             else if (Physics.Raycast(rayon, out Hitinfo, 500f, LayerMask.GetMask("Boss")))
             {
-                // This part is the condition to defeat the Boss
-                if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
-                {
-                    //ApplyDamage();
-                    AttackEnd(Hitinfo);
-                }
-                else
-                {
-                    Debug.Log("Can't attack");
-                }
+                Debug.Log("Can't attack Boss yet");
             }
         }
     }
 
-    // Ceci est pour un feedback de la mort de l'ennemi
-    private IEnumerator DestroyEnemy(RaycastHit i_Hitinfo)
-    {
-        for (int i = 9; i > 0; i--)
-        {
-            i_Hitinfo.collider.gameObject.transform.localScale -= new Vector3(0.1F, 0.1f, 0.1f);
-            yield return new WaitForSeconds(0.1f);
-        }
-        
-        m_Turnmanager.m_Characters.Remove(i_Hitinfo.collider.gameObject);
-        Destroy(i_Hitinfo.collider.gameObject);
-    }
-
     private void AttackEnd(RaycastHit i_Hitinfo)
     {
-  
         StartCoroutine(DestroyEnemy(i_Hitinfo)); // This is to call Death Animation for Enemies
 
         m_XpBar.value += 0.40f;
@@ -223,6 +217,19 @@ public class PlayerController : MonoBehaviour
         m_RangeButtonIsPressed = false;
     }
 
+    // Ceci est pour un feedback de la mort de l'ennemi
+    private IEnumerator DestroyEnemy(RaycastHit i_Hitinfo)
+    {
+        for (int i = 9; i > 0; i--)
+        {
+            i_Hitinfo.collider.gameObject.transform.localScale -= new Vector3(0.1F, 0.1f, 0.1f);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        m_Turnmanager.m_Characters.Remove(i_Hitinfo.collider.gameObject);
+        Destroy(i_Hitinfo.collider.gameObject);
+    }
+
     public void ApplyDamage(float i_AttackDamage)
     {
         // Place to Apply damage
@@ -232,6 +239,7 @@ public class PlayerController : MonoBehaviour
         // ICI ON DOIT APPELER UNE COROUTINE POUR INSTAURER LE PROJECTILE ET LE DOMMAGE EST APPELER À LA FIN DE CELLE-CI
         StartCoroutine(ApplyDamageFeedback());
     }
+    
     private IEnumerator ApplyDamageFeedback()
     {
         gameObject.GetComponent<Renderer>().material.color = Color.red;
@@ -245,7 +253,6 @@ public class PlayerController : MonoBehaviour
         m_Ability2.gameObject.SetActive(true);
         m_Ability3.gameObject.SetActive(true);
         m_Ability4.gameObject.SetActive(true);
-
     }
 
     public void EndTurn()
@@ -257,8 +264,12 @@ public class PlayerController : MonoBehaviour
         m_EndTurnButton.interactable = false;
         m_MeleeAttackButton.interactable = false;
         m_RangeAttackButton.interactable = false;
+        // Les capsules sont détectées malgré leur scale de Vector3.zero. Il faut donc le désactiver entre les tours.
         m_AttackZone.transform.localScale = Vector3.zero;
         m_RangeAttackZone.transform.localScale = Vector3.zero;
+        m_AttackZone.GetComponent<CapsuleCollider>().enabled = false;
+        m_MoveZone.GetComponent<CapsuleCollider>().enabled = false;
+        m_RangeAttackZone.GetComponent<CapsuleCollider>().enabled = false;
     }
 
     // Cette région permet aux boutons d'appaler ces fonctions. Les Booleens sont activés et permettent les Move/Attack/Ability/EndTurn
@@ -276,6 +287,7 @@ public class PlayerController : MonoBehaviour
             m_MoveZone.SetActive(true);
         }
     }
+
     public void ActivateAttack()
     {
         if (!m_RangeAttack)
@@ -343,18 +355,22 @@ public class PlayerController : MonoBehaviour
             m_Ability4.gameObject.SetActive(true);
         }
     }
+
     public void ActivateAbility1()
     {
         // Has to be filled with Abilities
     }
+
     public void ActivateAbility2()
     {
         // Has to be filled with Abilities
     }
+
     public void ActivateAbility3()
     {
         // Has to be filled with Abilities
     }
+
     public void ActivateAbility4()
     {
         m_HealthBar.value += m_HealthRegenAbility;
