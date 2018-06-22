@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     #endregion
     [HideInInspector]
     public float m_CurrentHealth;
+    public float m_BulletSpeed = 50f;
     public GameObject m_UpgradeCanvas;
     [Header("Player Zones")]
     public GameObject m_MoveZone;
@@ -42,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private PlayerData m_PlayerData;
+    [SerializeField]
+    private GameObject m_ProjectilePrefab;
     private Vector3 m_ScaleOfAttackZone;
     private Vector3 m_ScaleOfRangeAttackZone;
     private Vector3 m_TargetPosition;
@@ -62,15 +65,15 @@ public class PlayerController : MonoBehaviour
         m_RangeAttackButton.gameObject.SetActive(false);
         m_MeleeAttackButton.gameObject.SetActive(false);
         m_MoveZone.SetActive(false);
-
-        m_ScaleOfAttackZone = m_AttackZone.transform.localScale * m_PlayerData.MeleeAttackRange;
-        m_ScaleOfRangeAttackZone = m_RangeAttackZone.transform.localScale * m_PlayerData.RangeAttackRange;
-        m_AttackZone.transform.localScale = Vector3.zero;
-        m_RangeAttackZone.transform.localScale = Vector3.zero;
     }
 
     private void Start()
     {
+        m_ScaleOfAttackZone = m_AttackZone.transform.localScale * m_PlayerData.MeleeAttackRange;
+        m_ScaleOfRangeAttackZone = m_RangeAttackZone.transform.localScale * m_PlayerData.RangeAttackRange;
+        m_AttackZone.transform.localScale = Vector3.zero;
+        m_RangeAttackZone.transform.localScale = Vector3.zero;
+
         m_MoveSpeed = m_PlayerData.MoveSpeed;
         m_MaxHealth = m_PlayerData.MaxHealth;
         m_HealthRegenAbility = m_PlayerData.HealthRegenAbility;
@@ -180,6 +183,13 @@ public class PlayerController : MonoBehaviour
             {
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
+                    if ((Hitinfo.collider.transform.position - transform.position).magnitude >= m_ScaleOfAttackZone.x/2)
+                    {
+                        GameObject m_BulletInstance = Instantiate(m_ProjectilePrefab, transform.position, Quaternion.identity);
+                        Projectile script = m_BulletInstance.GetComponent<Projectile>();
+                        script.InitSpeed(m_BulletSpeed, (Hitinfo.collider.transform.position - transform.position).normalized);
+                    }
+
                     //ApplyDamage();
                     AttackEnd(Hitinfo);
                 }
@@ -190,7 +200,7 @@ public class PlayerController : MonoBehaviour
                 // This part is the condition to defeat the Boss
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
-                    //ApplyDamage();                    
+                    //ApplyDamage();
                     AttackEnd(Hitinfo);
                 }
             }
@@ -220,6 +230,7 @@ public class PlayerController : MonoBehaviour
     // Ceci est pour un feedback de la mort de l'ennemi
     private IEnumerator DestroyEnemy(RaycastHit i_Hitinfo)
     {
+        yield return new WaitForSeconds(1f);
         for (int i = 9; i > 0; i--)
         {
             i_Hitinfo.collider.gameObject.transform.localScale -= new Vector3(0.1F, 0.1f, 0.1f);
@@ -236,10 +247,9 @@ public class PlayerController : MonoBehaviour
         m_CurrentHealth -= i_AttackDamage;
         m_HealthBar.value = m_CurrentHealth / m_MaxHealth;
 
-        // ICI ON DOIT APPELER UNE COROUTINE POUR INSTAURER LE PROJECTILE ET LE DOMMAGE EST APPELER À LA FIN DE CELLE-CI
         StartCoroutine(ApplyDamageFeedback());
     }
-    
+
     private IEnumerator ApplyDamageFeedback()
     {
         gameObject.GetComponent<Renderer>().material.color = Color.red;
@@ -264,6 +274,7 @@ public class PlayerController : MonoBehaviour
         m_EndTurnButton.interactable = false;
         m_MeleeAttackButton.interactable = false;
         m_RangeAttackButton.interactable = false;
+
         // Les capsules sont détectées malgré leur scale de Vector3.zero. Il faut donc le désactiver entre les tours.
         m_AttackZone.transform.localScale = Vector3.zero;
         m_RangeAttackZone.transform.localScale = Vector3.zero;

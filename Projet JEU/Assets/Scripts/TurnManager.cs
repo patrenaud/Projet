@@ -49,7 +49,7 @@ public class TurnManager : MonoBehaviour
             m_SwitchCharacter = true;
         }
 
-        if (m_SwitchCharacter)
+        if (m_SwitchCharacter) // Lorsque SwitchCharacter est appelé, le tour du prochain dans la liste débute.
         {
             if (m_Turn < m_Characters.Count)
             {
@@ -57,7 +57,7 @@ public class TurnManager : MonoBehaviour
                 m_Turn++;
             }
             else
-            {
+            { // Lorsque l'on atteint le bout de la liste, on retourne au Player qui est le premier de la liste
                 m_Turn = 1;
 
                 // Les boutons sont activés pour le tour du joueur

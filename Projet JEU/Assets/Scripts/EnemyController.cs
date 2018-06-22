@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour
     public bool m_Attackable = false;
     [HideInInspector]
     public bool m_IsPlaying = false;
-    public Material m_EnemyMaterial;    
+    public Material m_EnemyMaterial;
 
     private Vector3 m_NormalAttackZone;
 
@@ -28,6 +28,7 @@ public class EnemyController : MonoBehaviour
         {
             m_AttackZonePrefab.transform.localScale = m_NormalAttackZone;
             EnemyAttack();
+            // Si l'ennemi ne peut pas attaquer, il pourra bouger par la suite et réessayer pour son attaque.
         }
     }
 
@@ -41,14 +42,14 @@ public class EnemyController : MonoBehaviour
         { 
             m_Player.GetComponent<PlayerController>().ApplyDamage(m_AttackDamage);
         }
-    }
-    
+    }    
     private IEnumerator EnemyAttackCoroutine()
     {
         yield return new WaitForSeconds(2f);
         m_AttackZonePrefab.transform.localScale = Vector3.zero;
         m_Turnmanager.m_SwitchCharacter = true; // Termine le tour de l'ennemi et envoi le tour au prochain du TurnManager
     }
+
 
     // Les changements de couleurs et le changement du bool se font lorsque la zone d'attaque du joueur entre en collision avec les ennemis
     private void OnTriggerStay(Collider a_Other)
