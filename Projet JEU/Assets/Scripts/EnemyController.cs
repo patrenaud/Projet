@@ -28,7 +28,8 @@ public class EnemyController : MonoBehaviour
         {
             m_AttackZonePrefab.transform.localScale = m_NormalAttackZone;
             EnemyAttack();
-            // Si l'ennemi ne peut pas attaquer, il pourra bouger par la suite et réessayer pour son attaque.
+            // Si l'ennemi ne peut pas attaquer, 
+            // il pourra bouger par la suite et réessayer pour son attaque.
         }
     }
 

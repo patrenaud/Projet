@@ -29,10 +29,10 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider aOther)
     {
-		if(aOther.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+		if(aOther.gameObject.layer == LayerMask.NameToLayer("Enemy") || 
+        aOther.gameObject.layer == LayerMask.NameToLayer("Boss"))
 		{
 			Destroy(gameObject);
-			// Le dommage pourrait s'appliquer à partir d'ici pour l'alpha
 		}
     }
 }

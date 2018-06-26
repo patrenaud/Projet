@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     #endregion
     [HideInInspector]
     public float m_CurrentHealth;
-    public float m_BulletSpeed = 50f;
+
     public GameObject m_UpgradeCanvas;
     [Header("Player Zones")]
     public GameObject m_MoveZone;
@@ -47,9 +47,11 @@ public class PlayerController : MonoBehaviour
     private GameObject m_ProjectilePrefab;
     private Vector3 m_ScaleOfAttackZone;
     private Vector3 m_ScaleOfRangeAttackZone;
+    // private Vector3 m_ScaleOfMoveZone;
     private Vector3 m_TargetPosition;
     private bool m_MeleeButtonIsPressed = false;
     private bool m_RangeButtonIsPressed = false;
+    private float m_BulletSpeed = 50f;
     private float m_MoveSpeed;
     private float m_MaxHealth;
     private float m_HealthRegenAbility;
@@ -71,8 +73,10 @@ public class PlayerController : MonoBehaviour
     {
         m_ScaleOfAttackZone = m_AttackZone.transform.localScale * m_PlayerData.MeleeAttackRange;
         m_ScaleOfRangeAttackZone = m_RangeAttackZone.transform.localScale * m_PlayerData.RangeAttackRange;
+        // m_ScaleOfMoveZone = m_MoveZone.transform.localScale * m_PlayerData.MoveDistance;
         m_AttackZone.transform.localScale = Vector3.zero;
         m_RangeAttackZone.transform.localScale = Vector3.zero;
+
 
         m_MoveSpeed = m_PlayerData.MoveSpeed;
         m_MaxHealth = m_PlayerData.MaxHealth;
@@ -183,13 +187,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
-                    if ((Hitinfo.collider.transform.position - transform.position).magnitude >= m_ScaleOfAttackZone.x/2)
-                    {
-                        GameObject m_BulletInstance = Instantiate(m_ProjectilePrefab, transform.position, Quaternion.identity);
-                        Projectile script = m_BulletInstance.GetComponent<Projectile>();
-                        script.InitSpeed(m_BulletSpeed, (Hitinfo.collider.transform.position - transform.position).normalized);
-                    }
-
+                    ShootProjectile(Hitinfo);
                     //ApplyDamage();
                     AttackEnd(Hitinfo);
                 }
@@ -200,6 +198,7 @@ public class PlayerController : MonoBehaviour
                 // This part is the condition to defeat the Boss
                 if (Hitinfo.collider.gameObject.GetComponent<EnemyController>().m_Attackable)
                 {
+                    ShootProjectile(Hitinfo);
                     //ApplyDamage();
                     AttackEnd(Hitinfo);
                 }
@@ -208,6 +207,17 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Can't attack Boss yet");
             }
+        }
+    }
+
+    private void ShootProjectile(RaycastHit i_Hitinfo)
+    {
+        //   position de l'ennemi          -       position du joueur - la moitié du scale de l'ennemi         .longueur   > rayon du préfab d'attaque
+        if ((i_Hitinfo.collider.transform.position - transform.position - i_Hitinfo.collider.transform.localScale).magnitude > m_ScaleOfAttackZone.x / 2 && m_RangeAttack)
+        {
+            GameObject m_BulletInstance = Instantiate(m_ProjectilePrefab, transform.position, Quaternion.identity);
+            Projectile script = m_BulletInstance.GetComponent<Projectile>();
+            script.InitSpeed(m_BulletSpeed, (i_Hitinfo.collider.transform.position - transform.position).normalized);
         }
     }
 
@@ -230,7 +240,7 @@ public class PlayerController : MonoBehaviour
     // Ceci est pour un feedback de la mort de l'ennemi
     private IEnumerator DestroyEnemy(RaycastHit i_Hitinfo)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         for (int i = 9; i > 0; i--)
         {
             i_Hitinfo.collider.gameObject.transform.localScale -= new Vector3(0.1F, 0.1f, 0.1f);

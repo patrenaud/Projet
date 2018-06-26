@@ -87,6 +87,7 @@ public class TurnManager : MonoBehaviour
         m_SwitchCharacter = true;
     }
 
+    // Ceci recommence la scene de combat
     public void LoadMain()
     {
         SceneManager.LoadScene("Main", LoadSceneMode.Single);
